@@ -1,0 +1,128 @@
+<% layout('layouts/boilerplate') %>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-6">
+                <div id="JobCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner ">
+                        <% job.images.forEach((img,i)=>{ %>
+                            <div class="carousel-item <%=i===0 ? 'active' : ''%>">
+                                <img id="showImage" src="<%= img.url %>" class="d-block w-100" alt="">
+                            </div>
+                            <%})%>
+                    </div>
+
+                    <% if(job.images.length>1) {%>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#JobCarousel"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#JobCarousel"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                        <%}%>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">
+                            <%= job.title %>
+                        </h5>
+                        <p class="card-text">
+                            <%= job.description %>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Location:
+                            <%= job.location %>
+                        </li>
+                        <li class="list-group-item">Recruiter:
+                            <%= job.author.username %>,
+                                <%= job.company %>
+                        </li>
+                    </ul>
+                    <% if(currentUser &&job.author.equals(currentUser._id)){%>
+                        <div class="card-body">
+                            <a href="/jobs/<%= job._id %>/edit " class="card-link btn btn-primary">Edit</a>
+                            <form class="d-inline" action="/jobs/<%= job._id %>?_method=DELETE" method="Post">
+                                <button class="btn btn-danger ">Delete</button>
+                                <p class="mt-1">Note: Before deleting the Job, please make sure you go to <a
+                                        href="/jobs/<%= job._id %>/edit ">Edit</a>
+                                    and delete the images associated with the job.</p>
+                            </form>
+                        </div>
+                        <%}%>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div id='map'></div>
+                <% if(!currentUser){%>
+                    <div>
+                        <h2 class="mt-2 text-center">Login to Apply!</h2>
+                        <div class="text-center">
+                            <a id="loginButton" class="loginbutton btn text-center mx-auto" href="/login">Login</a>
+                        </div>
+                    </div>
+                    <%}%>
+                        <% if(currentUser && !job.author.equals(currentUser._id) ){%>
+                            <h2 class="mt-2">Apply for the Job</h2>
+                            <form action="/jobs/<%= job._id %>/applications" method="POST" class="mb-3 validatedform"
+                                novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label" for="name">Name</label>
+                                    <input class="form-control" type="text" name="apply[name]" id="name" required>
+                                    <div class="valid-feedback">Looks good!</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="email">Email ID</label>
+                                    <input class="form-control" type="email" name="apply[email]" id="email" required>
+                                    <div class="valid-feedback">Looks good!</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="phoneNo">Contact Number</label>
+                                    <input class="form-control" type="text" name="apply[phoneNo]" id="phoneNo" required>
+                                    <div class="valid-feedback">Looks good!</div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-success">Apply</button>
+                                </div>
+                            </form>
+                            <%}%>
+                                <% if(currentUser &&job.author.equals(currentUser._id)){%>
+                                    <% for(let application of job.applications){ %>
+                                        <div class="card mt-2 mb-3">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    Applicant Name: <%=application.name%>
+                                                </h5>
+                                                <h6 class="card-subtitle mb-2 text-muted">Using Website with Username:
+                                                    <%=application.author.username%>
+                                                </h6>
+                                                <p class="card-text">Email of Applicant: <%=application.email%>
+                                                </p>
+                                                <p class="card-text">Contact Number of Applicant:
+                                                    <%=application.phoneNo%>
+                                                </p>
+                                                <form
+                                                    action="/jobs/<%= job._id %>/applications/<%=application._id  %>?_method=Delete"
+                                                    method="POST">
+                                                    <h6>Successfully Addressed?</h6>
+                                                    <button class="btn btn-sm btn-danger">Remove Application</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                            <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let job = '<%- JSON.stringify(job) %>'
+    </script>
+
+    <script src="/javascripts/showpageMap.js"></script>
