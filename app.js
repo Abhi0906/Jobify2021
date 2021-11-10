@@ -154,7 +154,7 @@ app.use((err, req, res, next) => {
     if (!err.message) err.message = 'On no.. Something went Wrong!'
     res.status(statusCode).render('error', { err });
 });
-
-app.listen(3000, () => {
-    console.log('Connected to database!')
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Connected to database! Port: ${port}`)
 });
