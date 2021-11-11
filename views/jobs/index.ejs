@@ -1,11 +1,5 @@
 <% layout('layouts/boilerplate') %>
-    <h1 class="mt-4 mb-4 text-center">Job Availability</h1>
-
-    <div id="cluster-map">
-    </div>
-
-
-    <h2 class="mt-4 mb-4 text-center">All Jobs</h2>
+    <h1 class="mt-4 mb-4 text-center">All Jobs</h1>
 
     <% for(let job of jobs){ %>
         <div id="showPage" class="card mb-3">
@@ -43,4 +37,3 @@
             <script>
                 let jobs = { features: JSON.parse('<%- JSON.stringify(jobs) %>') }
             </script>
-            <script src="/javascripts/clusterMap.js"></script>
