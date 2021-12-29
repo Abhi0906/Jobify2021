@@ -2,10 +2,9 @@ const { jobSchema, applySchema } = require('./schemas');
 const ExpressError = require('./utils/ExpressError');
 const Job = require('./models/job');
 
-
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
-        req.session.returnTo = req.originalUrl
+        req.session.returnTo = req.originalUrl;
         req.flash('error', 'You must be Logged In!');
         return res.redirect('/login')
     }

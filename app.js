@@ -35,7 +35,6 @@ const app = express();
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
-app
 
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
@@ -44,7 +43,7 @@ app.use(mongoSanitize({
     replaceWith: '_'
 }));
 
-const secret = process.env.SECRET
+const secret = process.env.SECRET;
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
@@ -66,14 +65,13 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        secure: true,
         expires: Date.now() * 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
-app.use(session(sessionConfig))
-app.use(flash())
-app.use(helmet())
+app.use(session(sessionConfig));
+app.use(flash());
+app.use(helmet());
 
 const scriptSrcUrls = [
     "https://stackpath.bootstrapcdn.com/",
@@ -154,6 +152,7 @@ app.use((err, req, res, next) => {
     if (!err.message) err.message = 'On no.. Something went Wrong!'
     res.status(statusCode).render('error', { err });
 });
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Connected to database! Port: ${port}`)
