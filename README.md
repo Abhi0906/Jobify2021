@@ -1,5 +1,5 @@
 # Jobify2021
-Job Website - A Project developed by watching a Web Development Course
+Job Website - A Project developed with the help of a Web Development Course
 
 The Link for the website is
 jobify2021.herokuapp.com
